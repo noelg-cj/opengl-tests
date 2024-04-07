@@ -6,7 +6,12 @@
 #include <string>
 #include <sstream>
 
-static void parseShader(const std::string& filePath) {
+struct ShaderProgramSource {
+    std::string VertexSource;
+    std::string FragmentSource;
+};
+
+static ShaderProgramSource parseShader(const std::string& filePath) {
     std::ifstream stream(filePath);
 
     enum class shaderType {
@@ -28,11 +33,16 @@ static void parseShader(const std::string& filePath) {
         }
 
         else {
-            ss[(int)type] << line << "\n";
+            std::cout << line << std::endl;
+            if (type == shaderType::VERTEX) {
+                ss[0] << line << "\n";
+            }
+            else if (type == shaderType::FRAGMENT) {
+                ss[1] << line << "\n";
+            }
         }
     }
-
-
+    return { ss[0].str(), ss[1].str() };
 }
 
 static unsigned int CompileShader(unsigned int type, const std::string& source) {
@@ -111,6 +121,12 @@ int main(void)
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
+    ShaderProgramSource source = parseShader("res/shaders/Basic.shader");
+    //std::cout << "VERTEX" << std::endl;
+    //std::cout << source.VertexSource << std::endl;
+    //std::cout << "FRAGMENT" << std::endl;
+    //std::cout << source.FragmentSource << std::endl;
 
     std::string vertexShader = 
         "#version 330 core\n"
