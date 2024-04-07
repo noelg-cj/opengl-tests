@@ -123,10 +123,10 @@ int main(void)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
     ShaderProgramSource source = parseShader("res/shaders/Basic.shader");
-    //std::cout << "VERTEX" << std::endl;
-    //std::cout << source.VertexSource << std::endl;
-    //std::cout << "FRAGMENT" << std::endl;
-    //std::cout << source.FragmentSource << std::endl;
+    std::cout << "VERTEX" << std::endl;
+    std::cout << source.VertexSource << std::endl;
+    std::cout << "FRAGMENT" << std::endl;
+    std::cout << source.FragmentSource << std::endl;
 
     std::string vertexShader = 
         "#version 330 core\n"
@@ -146,7 +146,7 @@ int main(void)
         "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
         "}\n";
 
-    unsigned int shader = createShader(vertexShader, fragmentShader);
+    unsigned int shader = createShader(source.VertexSource, source.FragmentSource);
     glUseProgram(shader);
 
     /* Loop until the user closes the window */
